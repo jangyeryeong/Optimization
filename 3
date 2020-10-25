@@ -1,0 +1,33 @@
+# 2번 파일은 단항식, 3번 파일은 다항식임.
+import csv
+import numpy as np
+import matplotlib.pyplot as plt
+
+with open("sample_data.csv", encoding='utf-8-sig') as data:
+    reader = csv.DictReader(data)
+    prices = []
+    quantities = []
+    for row in reader:
+        price = int(row['price'])
+        sale_qty = int(row['sale_qty'])
+        prices.append(price)
+        quantities.append(sale_qty)
+        plt.scatter(price, sale_qty)
+
+    #np.array 넘파이를 데이터 처리를 좋은 형태로 바꿔줌
+    #폴리핏 다차방정식에 대한 최적값 회귀 분석
+    x = np.array(prices)
+    y = np.array(quantities)
+
+    fit = np.polyfit(x, y, 2)
+    print(fit)
+
+    optimal_xaxis = []
+    optimal_yaxis = []
+
+    for price in range(10000, 100000, 1000):
+        optimal_xaxis.append(price)
+        optimal_yaxis.append(fit[0] * (price ** 2) + fit[1] * price + fit[2])
+
+    plt.plot(optimal_xaxis, optimal_yaxis)
+    plt.show()
